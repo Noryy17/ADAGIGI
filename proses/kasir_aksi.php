@@ -21,10 +21,11 @@ if (mysqli_query($koneksi, $query_transaksi)) {
     $query_lunas = "UPDATE rekam_medis SET status_tagihan = 'Lunas' WHERE id_periksa = '$id_periksa'";
     mysqli_query($koneksi, $query_lunas);
 
-    // Jika sukses, munculkan notifikasi dan kembali ke halaman kasir
+    // INI BAGIAN YANG BERUBAH:
+    // Jika sukses, lempar ke halaman cetak struk membawa ID-nya
     echo "<script>
-        alert('Pembayaran Berhasil! Status pasien telah diperbarui menjadi Lunas.');
-        window.location.href = '../views/kasir.php';
+        alert('Pembayaran Berhasil! Mengalihkan ke halaman cetak struk...');
+        window.location.href = '../views/cetak_struk.php?id_periksa=$id_periksa';
     </script>";
 
 } else {

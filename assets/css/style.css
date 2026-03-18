@@ -1,0 +1,25 @@
+/* assets/css/style.css */
+
+/* Custom Scrollbar agar lebih estetik di Windows */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #F4F6F9;
+}
+::-webkit-scrollbar-thumb {
+    background: #D1D5DB;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #9CA3AF;
+}
+
+/* Animasi halus untuk Card di Dashboard */
+.card-hover-effect {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-hover-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}

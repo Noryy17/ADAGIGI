@@ -1,39 +1,57 @@
 <?php
-// Memanggil koneksi database
+// 1. Hubungkan ke database
 require_once '../config/database.php';
 
-// 1. Menangkap data yang dikirim dari form rekam_medis.php
-$no_rm = $_POST['no_rm'];
-$keluhan = mysqli_real_escape_string($koneksi, $_POST['keluhan']);
-$diagnosis = mysqli_real_escape_string($koneksi, $_POST['diagnosis']);
-$tindakan = mysqli_real_escape_string($koneksi, $_POST['tindakan']);
+// 2. Tangkap data identitas pasien & waktu
+$no_rm          = $_POST['no_rm'];
+$waktu_periksa  = date('Y-m-d H:i:s');
 
-// 2. Memasukkan data ke tabel rekam_medis
-// Status tagihan otomatis diset 'Pending' agar muncul di layar kasir
-$query_rekam = "INSERT INTO rekam_medis (no_rm, keluhan, diagnosis, tindakan, status_tagihan) 
-                VALUES ('$no_rm', '$keluhan', '$diagnosis', '$tindakan', 'Pending')";
+// 3. Tangkap data Vital Signs (Angka)
+$berat_badan    = $_POST['berat_badan'] ?: 0;
+$tinggi_badan   = $_POST['tinggi_badan'] ?: 0;
+$tensi          = mysqli_real_escape_string($koneksi, $_POST['tensi']);
+$suhu           = mysqli_real_escape_string($koneksi, $_POST['suhu']);
+$nadi           = $_POST['nadi'] ?: 0;
 
-if (mysqli_query($koneksi, $query_rekam)) {
+// 4. Tangkap data SOAP (Teks Deskripsi)
+// Gunakan mysqli_real_escape_string agar tanda petik (') tidak bikin SQL Error
+$subjektif      = mysqli_real_escape_string($koneksi, $_POST['subjektif']);
+$objektif       = mysqli_real_escape_string($koneksi, $_POST['objektif']);
+$assessment     = mysqli_real_escape_string($koneksi, $_POST['assessment']);
+$plan           = mysqli_real_escape_string($koneksi, $_POST['plan']);
+
+// 5. Tangkap data Biaya Manual
+$tindakan_nama  = mysqli_real_escape_string($koneksi, $_POST['tindakan_manual']);
+$total_biaya    = $_POST['total_biaya'] ?: 0;
+
+// --- PROSES SIMPAN TAHAP 1: Tabel rekam_medis ---
+$query_rm = "INSERT INTO rekam_medis (
+                no_rm, waktu_periksa, berat_badan, tinggi_badan, 
+                tensi, suhu, nadi, subjektif, objektif, assessment, plan
+            ) VALUES (
+                '$no_rm', '$waktu_periksa', '$berat_badan', '$tinggi_badan', 
+                '$tensi', '$suhu', '$nadi', '$subjektif', '$objektif', '$assessment', '$plan'
+            )";
+
+if (mysqli_query($koneksi, $query_rm)) {
     
-    // 3. Mengambil ID periksa yang baru saja dibuat (Auto Increment ID)
-    $id_periksa = mysqli_insert_id($koneksi);
+    // Ambil ID periksa yang barusan dibuat otomatis oleh database
+    $id_periksa_baru = mysqli_insert_id($koneksi);
 
-    // 4. Membuat draft transaksi di tabel transaksi
-    // Kita set biaya standar awal, misal Rp 50.000 (bisa diedit di kasir nanti)
-    $biaya_standar = 50000;
+    // --- PROSES SIMPAN TAHAP 2: Tabel transaksi (Untuk Antrean Kasir) ---
+    // Simpan id_periksa sebagai penghubung dan total biayanya
     $query_transaksi = "INSERT INTO transaksi (id_periksa, total_biaya) 
-                        VALUES ('$id_periksa', '$biaya_standar')";
+                        VALUES ('$id_periksa_baru', '$total_biaya')";
     
     mysqli_query($koneksi, $query_transaksi);
 
-    // Jika berhasil, munculkan notifikasi dan kembali ke halaman rekam medis
+    // 6. Selesai! Beri notif dan lempar balik ke halaman pendaftaran
     echo "<script>
-        alert('Data Pemeriksaan Berhasil Disimpan! Pasien telah diteruskan ke Kasir.');
-        window.location.href = '../views/rekam_medis.php';
-    </script>";
-
+            alert('Sukses! Data Medis & Tagihan Pasien Berhasil Disimpan.');
+            window.location.href = '../views/pendaftaran.php';
+          </script>";
 } else {
-    // Jika gagal, tampilkan pesan error
-    echo "Gagal menyimpan data: " . mysqli_error($koneksi);
+    // Jika ada yang salah, tampilkan error-nya biar gampang benerinnya
+    echo "Waduh, ada error di database: " . mysqli_error($koneksi);
 }
 ?>

@@ -12,12 +12,14 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 
+    <link rel="stylesheet" href="assets/css/style.css">
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'bg-klinik': '#F4F6F9', /* Warna background presisi Figma */
+                        'bg-klinik': '#F4F6F9', 
                     }
                 }
             }
@@ -36,33 +38,33 @@
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl w-full mb-8">
         
-        <a href="views/pendaftaran.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-lg hover:-translate-y-1 hover:border-blue-200 transition-all duration-300 group">
+        <a href="views/pendaftaran.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 transition-all group card-hover-effect">
             <div class="bg-[#EFF6FF] w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
-                <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-2">Pendaftaran Pasien</h2>
             <p class="text-gray-400 text-sm leading-relaxed">Daftarkan pasien baru dan kelola data pasien</p>
         </a>
 
-        <a href="views/rekam_medis.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-lg hover:-translate-y-1 hover:border-green-200 transition-all duration-300 group">
+        <a href="views/rekam_medis.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 transition-all group card-hover-effect">
             <div class="bg-[#F0FDF4] w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-green-100 transition-colors">
-                <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <svg class="w-7 h-7 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-2">Rekam Medis</h2>
             <p class="text-gray-400 text-sm leading-relaxed">Input data pemeriksaan dan diagnosis dokter</p>
         </a>
 
-        <a href="views/kasir.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-lg hover:-translate-y-1 hover:border-purple-200 transition-all duration-300 group">
+        <a href="views/kasir.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 transition-all group card-hover-effect">
             <div class="bg-[#FAF5FF] w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-100 transition-colors">
-                <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-2">Pembayaran</h2>
             <p class="text-gray-400 text-sm leading-relaxed">Proses pembayaran dan cetak struk</p>
         </a>
 
-        <a href="views/laporan.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 hover:shadow-lg hover:-translate-y-1 hover:border-orange-200 transition-all duration-300 group">
+        <a href="views/laporan.php" class="bg-white p-6 rounded-[20px] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] border border-gray-100 transition-all group card-hover-effect">
             <div class="bg-[#FFF7ED] w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-orange-100 transition-colors">
-                <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <svg class="w-7 h-7 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
             <h2 class="text-xl font-bold text-gray-900 mb-2">Laporan Harian</h2>
             <p class="text-gray-400 text-sm leading-relaxed">Ringkasan pasien dan pendapatan harian</p>

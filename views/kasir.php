@@ -141,6 +141,6 @@ $query_antrean = mysqli_query($koneksi, "SELECT t.id_periksa, t.total_biaya, rm.
             </div>
         </div>
     </div>
-
+<script src="../assets/js/main.js"></script>
 </body>
 </html>
