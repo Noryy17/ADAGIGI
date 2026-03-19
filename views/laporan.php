@@ -4,20 +4,20 @@ require_once '../config/database.php';
 // 1. Ambil Tanggal Hari Ini
 $hari_ini = date('Y-m-d');
 
-// 2. Hitung Total Pasien Hari Ini (Berdasarkan Rekam Medis)
+// 2. Hitung Total Pasien Hari Ini
 $q_pasien = mysqli_query($koneksi, "SELECT COUNT(*) as total_pasien FROM rekam_medis WHERE DATE(waktu_periksa) = '$hari_ini'");
 $res_pasien = mysqli_fetch_assoc($q_pasien);
 $total_pasien = $res_pasien['total_pasien'];
 
-// 3. Hitung Total Pendapatan Hari Ini (Hanya yang statusnya 'Lunas')
+// 3. Hitung Total Pendapatan Hari Ini
 $q_duit = mysqli_query($koneksi, "SELECT SUM(total_biaya) as total_pendapatan FROM transaksi t 
                                   JOIN rekam_medis rm ON t.id_periksa = rm.id_periksa 
                                   WHERE DATE(rm.waktu_periksa) = '$hari_ini' AND rm.status_tagihan = 'Lunas'");
 $res_duit = mysqli_fetch_assoc($q_duit);
 $total_pendapatan = $res_duit['total_pendapatan'] ?: 0;
 
-// 4. Ambil Daftar Transaksi Hari Ini untuk Tabel
-$query_tabel = mysqli_query($koneksi, "SELECT t.total_biaya, rm.no_rm, rm.waktu_periksa, p.nama_lengkap, rm.status_tagihan 
+// 4. Ambil Daftar Transaksi Hari Ini (Termasuk nama_dokter)
+$query_tabel = mysqli_query($koneksi, "SELECT t.total_biaya, rm.no_rm, rm.waktu_periksa, rm.nama_dokter, p.nama_lengkap, rm.status_tagihan 
                                         FROM transaksi t 
                                         JOIN rekam_medis rm ON t.id_periksa = rm.id_periksa 
                                         JOIN pasien p ON rm.no_rm = p.no_rm 
@@ -73,6 +73,7 @@ $query_tabel = mysqli_query($koneksi, "SELECT t.total_biaya, rm.no_rm, rm.waktu_
                             <th class="px-6 py-4">Waktu</th>
                             <th class="px-6 py-4">Nomor RM</th>
                             <th class="px-6 py-4">Nama Pasien</th>
+                            <th class="px-6 py-4">Dokter</th>
                             <th class="px-6 py-4">Biaya</th>
                             <th class="px-6 py-4">Status</th>
                         </tr>
@@ -83,6 +84,7 @@ $query_tabel = mysqli_query($koneksi, "SELECT t.total_biaya, rm.no_rm, rm.waktu_
                             <td class="px-6 py-4 text-gray-500"><?= date('H:i', strtotime($row['waktu_periksa'])); ?></td>
                             <td class="px-6 py-4 font-mono text-blue-600 font-bold"><?= $row['no_rm']; ?></td>
                             <td class="px-6 py-4 font-bold text-gray-900"><?= $row['nama_lengkap']; ?></td>
+                            <td class="px-6 py-4 text-gray-600"><?= $row['nama_dokter']; ?></td>
                             <td class="px-6 py-4 font-bold text-gray-700">Rp <?= number_format($row['total_biaya'], 0, ',', '.'); ?></td>
                             <td class="px-6 py-4">
                                 <span class="px-3 py-1 rounded-full text-[10px] font-bold <?= $row['status_tagihan'] == 'Lunas' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600' ?>">
@@ -94,7 +96,7 @@ $query_tabel = mysqli_query($koneksi, "SELECT t.total_biaya, rm.no_rm, rm.waktu_
                         
                         <?php if(mysqli_num_rows($query_tabel) == 0): ?>
                         <tr>
-                            <td colspan="5" class="px-6 py-10 text-center text-gray-400 italic text-sm">Belum ada aktivitas pasien hari ini.</td>
+                            <td colspan="6" class="px-6 py-10 text-center text-gray-400 italic text-sm">Belum ada aktivitas pasien hari ini.</td>
                         </tr>
                         <?php endif; ?>
                     </tbody>

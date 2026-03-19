@@ -1,15 +1,13 @@
 <?php
 require_once '../config/database.php';
 
-// Tangkap ID dari URL
 $id_periksa = isset($_GET['id_periksa']) ? $_GET['id_periksa'] : '';
 
 if (!$id_periksa) {
     die("Data transaksi tidak ditemukan!");
 }
 
-// Ambil data lengkap transaksi
-$query = mysqli_query($koneksi, "SELECT t.*, rm.no_rm, rm.waktu_periksa, rm.tindakan, p.nama_lengkap 
+$query = mysqli_query($koneksi, "SELECT t.*, rm.no_rm, rm.nama_dokter, rm.waktu_periksa, rm.plan as tindakan, p.nama_lengkap 
                                  FROM transaksi t 
                                  JOIN rekam_medis rm ON t.id_periksa = rm.id_periksa 
                                  JOIN pasien p ON rm.no_rm = p.no_rm 
@@ -23,34 +21,15 @@ $data = mysqli_fetch_assoc($query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk Pembayaran - <?= $data['nama_lengkap']; ?></title>
     <style>
-        /* CSS Khusus Printer Thermal / Kertas Kecil */
-        body { 
-            font-family: 'Courier New', Courier, monospace; 
-            color: #000; 
-            background: #fff; 
-            margin: 0; 
-            padding: 20px; 
-            font-size: 12px; 
-        }
-        .struk-container { 
-            max-width: 300px; /* Lebar standar kertas struk */
-            margin: 0 auto; 
-            border: 1px dashed #000; 
-            padding: 15px; 
-        }
+        body { font-family: 'Courier New', Courier, monospace; color: #000; background: #fff; margin: 0; padding: 20px; font-size: 12px; }
+        .struk-container { max-width: 300px; margin: 0 auto; border: 1px dashed #000; padding: 15px; }
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .font-bold { font-weight: bold; }
         .divider { border-top: 1px dashed #000; margin: 10px 0; }
         table { width: 100%; border-collapse: collapse; }
         td { padding: 2px 0; }
-        
-        /* THE MAGIC: CSS ini hanya aktif saat masuk mode Print */
-        @media print {
-            .no-print { display: none; } /* Sembunyikan tombol saat dicetak */
-            body { padding: 0; }
-            .struk-container { border: none; padding: 0; max-width: 100%; }
-        }
+        @media print { .no-print { display: none; } body { padding: 0; } .struk-container { border: none; padding: 0; max-width: 100%; } }
     </style>
 </head>
 <body onload="window.print()">
@@ -66,7 +45,7 @@ $data = mysqli_fetch_assoc($query);
         <table>
             <tr>
                 <td>Waktu</td>
-                <td class="text-right"><?= date('d/m/Y H:i', strtotime($data['waktu_bayar'])); ?></td>
+                <td class="text-right"><?= date('d/m/Y H:i', strtotime($data['waktu_bayar'] ?? date('Y-m-d H:i:s'))); ?></td>
             </tr>
             <tr>
                 <td>No. RM</td>
@@ -76,12 +55,16 @@ $data = mysqli_fetch_assoc($query);
                 <td>Pasien</td>
                 <td class="text-right"><?= $data['nama_lengkap']; ?></td>
             </tr>
+            <tr>
+                <td>Dokter</td>
+                <td class="text-right"><?= $data['nama_dokter']; ?></td>
+            </tr>
         </table>
 
         <div class="divider"></div>
         
-        <p class="font-bold" style="margin:5px 0;">Tindakan / Resep:</p>
-        <p style="margin:0 0 10px 0; line-height: 1.4;"><?= $data['tindakan']; ?></p>
+        <p class="font-bold" style="margin:5px 0;">Tindakan / Obat:</p>
+        <p style="margin:0 0 10px 0; line-height: 1.4; white-space: pre-wrap;"><?= $data['tindakan']; ?></p>
         
         <div class="divider"></div>
 
