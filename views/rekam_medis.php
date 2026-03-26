@@ -9,7 +9,7 @@ if(mysqli_num_rows($cek_kolom) == 0) {
 }
 $cek_dokter = mysqli_query($koneksi, "SHOW COLUMNS FROM rekam_medis LIKE 'nama_dokter'");
 if(mysqli_num_rows($cek_dokter) == 0) {
-    mysqli_query($koneksi, "ALTER TABLE rekam_medis ADD nama_dokter VARCHAR(100) DEFAULT '-' AFTER no_rm");
+    mysqli_query($koneksi, "ALTER TABLE rekam_medis ADD name_dokter VARCHAR(100) DEFAULT '-' AFTER no_rm");
 }
 // ------------------------------------------------------------------------------------
 
@@ -138,14 +138,12 @@ if ($no_rm != '') {
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <label class="text-[11px] font-bold text-gray-500 mb-2 block uppercase">Dokter Pemeriksa *</label>
-                                    <input type="text" name="nama_dokter" required list="daftar_dokter" placeholder="Ketik atau pilih nama..." class="w-full bg-gray-50 p-4 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none font-bold text-gray-700">
-                                    <datalist id="daftar_dokter">
-                                        <option value="Drg. Nendika">
-                                        <option value="Drg. Andhika">
-                                        <option value="Drg. Sarah">
-                                        <option value="Drg. Budi">
-                                    </datalist>
-                                    <p class="text-[10px] text-gray-400 mt-2 italic">*Bebas ketik nama dokter baru jika tidak ada di pilihan.</p>
+                                    <select name="nama_dokter" required class="w-full bg-gray-50 p-4 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none font-bold text-gray-700 appearance-none">
+                                        <option value="" disabled selected>-- Pilih Dokter --</option>
+                                        <option value="drg. Nendika Dyah Ayu. Sp.KGA">drg. Nendika Dyah Ayu. Sp.KGA</option>
+                                        <option value="drg. Hanifah Arya Lutfita">drg. Hanifah Arya Lutfita</option>
+                                    </select>
+                                    <p class="text-[10px] text-gray-400 mt-2 italic">*Pilih salah satu dokter pemeriksa di atas.</p>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
