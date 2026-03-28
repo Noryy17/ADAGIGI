@@ -2,10 +2,10 @@
 require_once '../config/database.php';
 
 $no_rm          = $_POST['no_rm'];
+$id_antrean     = isset($_POST['id_antrean']) ? $_POST['id_antrean'] : '';
 $waktu_periksa  = date('Y-m-d H:i:s');
 $nama_dokter    = mysqli_real_escape_string($koneksi, $_POST['nama_dokter']);
 
-// --- UPDATE DATA ALERGI & PENYAKIT ---
 $alergi = mysqli_real_escape_string($koneksi, $_POST['alergi'] ?: '-');
 $penyakit = mysqli_real_escape_string($koneksi, $_POST['penyakit_sistemik'] ?: '-');
 mysqli_query($koneksi, "UPDATE pasien SET alergi = '$alergi', penyakit_sistemik = '$penyakit' WHERE no_rm = '$no_rm'");
@@ -19,11 +19,8 @@ $nadi           = $_POST['nadi'] ?: 0;
 $subjektif      = mysqli_real_escape_string($koneksi, $_POST['subjektif']);
 $objektif       = mysqli_real_escape_string($koneksi, $_POST['objektif']);
 $assessment     = mysqli_real_escape_string($koneksi, $_POST['assessment']);
-
-// TANGKAP TEXTAREA "PLANNING"
 $plan_awal      = mysqli_real_escape_string($koneksi, $_POST['plan']); 
 
-// --- PROSES ARRAY TINDAKAN ---
 $arr_nama  = $_POST['tindakan_nama'];
 $arr_harga = $_POST['tindakan_harga'];
 $arr_qty   = $_POST['tindakan_qty'];
@@ -43,7 +40,6 @@ for ($i = 0; $i < count($arr_nama); $i++) {
     }
 }
 
-// GABUNGKAN PLANNING DOKTER & RINCIAN KASIR UNTUK STRUK
 $plan_gabungan = $plan_awal . "\n\n[Rincian Biaya Kasir]\n" . $rincian_tindakan; 
 
 $query_rm = "INSERT INTO rekam_medis (
@@ -57,10 +53,16 @@ $query_rm = "INSERT INTO rekam_medis (
 if (mysqli_query($koneksi, $query_rm)) {
     $id_periksa_baru = mysqli_insert_id($koneksi);
     
+    // Simpan ke Transaksi
     $query_transaksi = "INSERT INTO transaksi (id_periksa, total_biaya) VALUES ('$id_periksa_baru', '$grand_total')";
     mysqli_query($koneksi, $query_transaksi);
 
-    echo "<script>alert('Sukses! Data Medis Lengkap Tersimpan.'); window.location.href = '../views/pendaftaran.php';</script>";
+    // HAPUS DARI ANTREAN
+    if($id_antrean != ''){
+        mysqli_query($koneksi, "UPDATE antrean SET status = 'Selesai' WHERE id = '$id_antrean'");
+    }
+
+    echo "<script>alert('Sukses! Rekam Medis Tersimpan. Silakan panggil pasien selanjutnya.'); window.location.href = '../views/rekam_medis.php';</script>";
 } else {
     echo "Error Database: " . mysqli_error($koneksi);
 }

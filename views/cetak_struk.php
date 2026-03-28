@@ -13,6 +13,19 @@ $query = mysqli_query($koneksi, "SELECT t.*, rm.no_rm, rm.nama_dokter, rm.waktu_
                                  JOIN pasien p ON rm.no_rm = p.no_rm 
                                  WHERE t.id_periksa = '$id_periksa'");
 $data = mysqli_fetch_assoc($query);
+
+// --- CARA BARU (ANTI ERROR INTELEPHENSE) ---
+// Pakai strpos() dan substr() supaya murni text (string), bukan array
+$tindakan_full = isset($data['tindakan']) ? (string)$data['tindakan'] : "";
+$rincian_kasir = $tindakan_full; // Default tampilkan semua
+$pemisah = "[Rincian Biaya Kasir]";
+$posisi = strpos($tindakan_full, $pemisah);
+
+if ($posisi !== false) {
+    // Ambil text setelah kata "[Rincian Biaya Kasir]"
+    $rincian_kasir = trim(substr($tindakan_full, $posisi + strlen($pemisah)));
+}
+// -------------------------------------------
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -28,7 +41,7 @@ $data = mysqli_fetch_assoc($query);
         .font-bold { font-weight: bold; }
         .divider { border-top: 1px dashed #000; margin: 10px 0; }
         table { width: 100%; border-collapse: collapse; }
-        td { padding: 2px 0; }
+        td { padding: 2px 0; vertical-align: top;}
         @media print { .no-print { display: none; } body { padding: 0; } .struk-container { border: none; padding: 0; max-width: 100%; } }
     </style>
 </head>
@@ -36,8 +49,8 @@ $data = mysqli_fetch_assoc($query);
     <div class="struk-container">
         
         <div class="text-center">
-            <h2 style="margin:0;">KLINIK GIGI DAIN</h2>
-            <p style="margin:5px 0;">Jl. Karangmalang, Yogyakarta<br>Telp: 0812-XXXX-XXXX</p>
+            <h2 style="margin:0; font-size: 16px;">Praktik dokter gigi anak dan dokter gigi</h2>
+            <p style="margin:5px 0;">Dulang Asri RT 15, Wonokerso, Kedawung, Sragen, 57292<br>WA : 08112959191</p>
         </div>
         
         <div class="divider"></div>
@@ -62,10 +75,10 @@ $data = mysqli_fetch_assoc($query);
         </table>
 
         <div class="divider"></div>
-        
-        <p class="font-bold" style="margin:5px 0;">Tindakan / Obat:</p>
-        <p style="margin:0 0 10px 0; line-height: 1.4; white-space: pre-wrap;"><?= $data['tindakan']; ?></p>
-        
+
+        <p class="font-bold" style="margin:5px 0;">Rincian Tindakan / Obat:</p>
+        <div style="margin:0 0 10px 0; line-height: 1.6; white-space: pre-wrap; font-size: 11px;"><?= $rincian_kasir; ?></div>
+
         <div class="divider"></div>
 
         <table>
